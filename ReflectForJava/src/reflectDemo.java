@@ -32,11 +32,17 @@ cons.newInstance(new Object[]{"hello",3});
 getDeclaredMethod*()获取的是类自身声明的所有方法，包含public、protected和private方法。
 getMethod*()获取的是类的所有共有方法，这就包括自身的所有public方法，和从基类继承的、从接口实现的所有public方法
 		 */
-class user{
+interface  animal{
+	public void walk();
+}
+class user implements animal{
 	public String name;
 	public int age;
 	private String password;
 	
+	public user() {
+	}
+
 	public user(String name, int age) {
 		this.name = name;
 		this.age = age;
@@ -66,8 +72,12 @@ class user{
 	private String printPassWord(){
 		return password;
 	}
+
+	public void walk() {
+		System.out.println(this.name + "walking");
+	}
 }	
-public class reflectDemo1 {
+public class reflectDemo {
 
 	public static void main(String[] args) throws Exception{
 		// class forName used to find class 获取class对象
@@ -132,5 +142,13 @@ public class reflectDemo1 {
 	passwordField.set(userObject, "password");
 	String passwordAfter = (String) passwordField.get(userObject);
 	System.out.println(password+" "+passwordAfter);
+	
+	/*
+	 * 6. 使用动态代理的方式调用
+	 * 注意返回的必须是接口类型
+	 */
+	DynamicProxy proxy = new DynamicProxy(new user("SGame",18));
+	animal userProxy = (animal)proxy.getProxy();
+	userProxy.walk();
 	}
 }
